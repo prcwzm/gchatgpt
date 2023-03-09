@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>WebSocket Client Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: #2c3e50;
+            font-size: 36px;
+            margin-bottom: 30px;
+        }
+        form {
+            margin-bottom: 30px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ecf0f1;
+            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        #output {
+            padding: 10px;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+            background-color: #ecf0f1;
+            height: 200px;
+            overflow-y: scroll;
+        }
+        #output p {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<h1>WebSocket Client Example</h1>
+<form onsubmit="return false;">
+    <label for="url">WebSocket URL:</label>
+    <input type="text" id="url" value="ws://localhost:8080/ws">
+    <br><br>
+    <label for="message">Message:</label>
+    <input type="text" id="message">
+    <button onclick="sendMessage()">Send</button>
+</form>
+<div id="output"></div>
+<script>
+    var ws = new WebSocket(document.getElementById("url").value);
+
+    ws.onopen = function() {
+        console.log("WebSocket connected.");
+        document.getElementById("output").innerHTML += "<p>WebSocket connected.</p>";
+    };
+
+    ws.onmessage = function(evt) {
+        console.log("Received message:", evt.data);
+        document.getElementById("output").innerHTML += "<p>Received message: " + evt.data + "</p>";
+    };
+
+    ws.onerror = function(evt) {
+        console.log("WebSocket error:", evt);
+        document.getElementById("output").innerHTML += "<p>WebSocket error: " + evt + "</p>";
+    };
+
+    ws.onclose = function() {
+        console.log("WebSocket closed.");
+        document.getElementById("output").innerHTML += "<p>WebSocket closed.</p>";
+    };
+
+    function sendMessage() {
+        var message = document.getElementById("message").value;
+        ws.send(message);
+        console.log("Sent message:", message);
+        document.getElementById("output").innerHTML += "<p>Sent message: " + message + "</p>";
+    }
+</script>
+</body>
+</html>
