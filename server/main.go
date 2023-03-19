@@ -13,15 +13,21 @@ func main() {
 	client := chat.GetChatClient()
 
 	r := gin.Default()
+	r.LoadHTMLGlob("static/*")
 	// 处理 HTTP 请求
-	r.GET("/", func(c *gin.Context) {
+	r.GET("/st", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", nil)
+	})
+
+	r.GET("/bt", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "beautify.html", nil)
 	})
 
 	// 处理 WebSocket 请求
 	r.GET("/ws", func(c *gin.Context) {
 		gws.Ws(c, client)
 	})
+
 	// 静态文件处理
 	r.Static("/static", "./static")
 

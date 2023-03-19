@@ -28,9 +28,30 @@ func Ws(c *gin.Context, client *openai.Client) {
 			fmt.Println("Error reading message from WebSocket:", err)
 			break
 		}
-		answer := chat.Chat(client, message)
-		// 将消息返回给客户端
-		err = conn.WriteMessage(websocket.TextMessage, []byte(answer))
+		var answer string
+		if string(message) == "exit" {
+			answer = "欢迎再来"
+			err = conn.WriteMessage(websocket.TextMessage, []byte(answer))
+			if err != nil {
+				fmt.Println("Error sending message:", err.Error())
+				break
+			}
+			break
+		} else {
+			//answer := chat.Chat(client, message)
+			dataSource := make(chan string)
+			go chat.ChatStream(client, message, dataSource)
+			for {
+				answer = <-dataSource
+				if answer == "EOF" {
+					break
+				} else {
+					// 将消息返回给客户端
+					err = conn.WriteMessage(websocket.TextMessage, []byte(answer))
+				}
+			}
+
+		}
 		if err != nil {
 			fmt.Println("Error writing message to WebSocket:", err)
 			break
