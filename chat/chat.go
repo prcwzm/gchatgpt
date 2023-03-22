@@ -50,7 +50,7 @@ func ChatStream(client *openai.Client, b []byte, dataSource chan string) {
 	ctx := context.Background()
 	req := openai.ChatCompletionRequest{
 		Model:     openai.GPT3Dot5Turbo,
-		MaxTokens: 20,
+		MaxTokens: 2048,
 		Messages: []openai.ChatCompletionMessage{
 			{
 				Role:    openai.ChatMessageRoleUser,
