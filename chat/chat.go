@@ -11,7 +11,7 @@ import (
 )
 
 func GetChatClient() *openai.Client {
-	conf := openai.DefaultConfig("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")
+	conf := openai.DefaultConfig("YOU_KEYS")
 	proxyAddress, _ := url.Parse("http://localhost:33210")
 	//proxyAddress, _ := url.Parse("https://openapi.ssiic.com")
 	conf.HTTPClient = &http.Client{
