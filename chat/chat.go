@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"gchatgpt/config"
 	"github.com/sashabaranov/go-openai"
 	"io"
 	"net/http"
@@ -11,7 +12,7 @@ import (
 )
 
 func GetChatClient() *openai.Client {
-	conf := openai.DefaultConfig("YOU_KEYS")
+	conf := openai.DefaultConfig(config.LoadKey("openai"))
 	proxyAddress, _ := url.Parse("http://localhost:33210")
 	//proxyAddress, _ := url.Parse("https://openapi.ssiic.com")
 	conf.HTTPClient = &http.Client{
