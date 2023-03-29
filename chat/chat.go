@@ -27,7 +27,7 @@ func Chat(client *openai.Client, b []byte) string {
 	resp, err := client.CreateChatCompletion(
 		context.Background(),
 		openai.ChatCompletionRequest{
-			Model:     openai.GPT3Dot5Turbo,
+			Model:     openai.GPT3Dot5Turbo0301,
 			MaxTokens: 2048,
 			Messages: []openai.ChatCompletionMessage{
 				{
@@ -49,7 +49,7 @@ func Chat(client *openai.Client, b []byte) string {
 func ChatStream(client *openai.Client, b []byte, dataSource chan string) {
 	ctx := context.Background()
 	req := openai.ChatCompletionRequest{
-		Model:     openai.GPT3Dot5Turbo,
+		Model:     openai.GPT3Dot5Turbo0301,
 		MaxTokens: 2048,
 		Messages: []openai.ChatCompletionMessage{
 			{
