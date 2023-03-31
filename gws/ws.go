@@ -19,6 +19,8 @@ func Ws(c *gin.Context, client *openai.Client) {
 		fmt.Println("Error upgrading to WebSocket:", err)
 		return
 	}
+	content := make([]openai.ChatCompletionMessage, 8)
+	contentChannel := make(chan *openai.ChatCompletionMessage)
 
 	// 在此处处理 WebSocket 连接
 	for {
@@ -38,12 +40,13 @@ func Ws(c *gin.Context, client *openai.Client) {
 			}
 			break
 		} else {
-			//answer := chat.Chat(client, message)
 			dataSource := make(chan string)
-			go chat.ChatStream(client, message, dataSource)
+			content = chat.StreamChatContent(client, message, dataSource, content, contentChannel)
 			for {
 				answer = <-dataSource
 				if answer == "EOF" {
+					rsp := <-contentChannel
+					content = chat.StitchContent(content, rsp)
 					break
 				} else {
 					// 将消息返回给客户端
