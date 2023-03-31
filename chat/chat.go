@@ -24,46 +24,6 @@ func GetChatClient() *openai.Client {
 	return openai.NewClientWithConfig(conf)
 }
 
-func Chat(client *openai.Client, b []byte) string {
-	resp, err := client.CreateChatCompletion(
-		context.Background(),
-		openai.ChatCompletionRequest{
-			Model:     openai.GPT3Dot5Turbo0301,
-			MaxTokens: 2048,
-			Messages: []openai.ChatCompletionMessage{
-				{
-					Role:    openai.ChatMessageRoleUser,
-					Content: string(b),
-				},
-			},
-		},
-	)
-
-	if err != nil {
-		fmt.Println("Error creating chat completion :", err)
-		return ""
-	}
-	return resp.Choices[0].Message.Content
-
-}
-
-func StreamChat(client *openai.Client, b []byte, dataSource chan string) {
-
-	req := openai.ChatCompletionRequest{
-		Model:     openai.GPT3Dot5Turbo0301,
-		MaxTokens: 2048,
-		Messages: []openai.ChatCompletionMessage{
-			{
-				Role:    openai.ChatMessageRoleUser,
-				Content: string(b),
-			},
-		},
-		Stream: true,
-	}
-	fmt.Println(req)
-	streamSend(client, req, dataSource)
-}
-
 func StreamChatContent(client *openai.Client, b []byte, dataSource chan string, content []openai.ChatCompletionMessage, contentChan chan *openai.ChatCompletionMessage) []openai.ChatCompletionMessage {
 	completionMessage := new(openai.ChatCompletionMessage)
 	completionMessage = &openai.ChatCompletionMessage{Role: openai.ChatMessageRoleUser, Content: string(b)}
