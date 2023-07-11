@@ -19,7 +19,7 @@ func Ws(c *gin.Context, client *openai.Client) {
 		fmt.Println("Error upgrading to WebSocket:", err)
 		return
 	}
-	content := make([]openai.ChatCompletionMessage, 8)
+	content := make([]openai.ChatCompletionMessage, 9)
 	contentChannel := make(chan *openai.ChatCompletionMessage)
 
 	// 在此处处理 WebSocket 连接
@@ -47,6 +47,7 @@ func Ws(c *gin.Context, client *openai.Client) {
 				if answer == "EOF" {
 					rsp := <-contentChannel
 					content = chat.StitchContent(content, rsp)
+					fmt.Println(content)
 					break
 				} else {
 					// 将消息返回给客户端
