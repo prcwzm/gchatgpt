@@ -23,6 +23,17 @@ func main() {
 		c.HTML(http.StatusOK, "beautify.html", nil)
 	})
 
+	r.POST("/fine-tune", func(c *gin.Context) {
+		fineTunedText := c.PostForm("text")
+		// 在这里处理 fine-tuned 文本，可以调用 chat.GetCompletion() 等方法进行处理
+		// 示例：response := chat.GetCompletion(client, fineTunedText)
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Fine-tuned text received and processed.",
+			"text":    fineTunedText,
+			// 可根据需要添加其他返回信息
+		})
+	})
+
 	// 处理 WebSocket 请求
 	r.GET("/ws", func(c *gin.Context) {
 		gws.Ws(c, client)
